@@ -20,11 +20,6 @@ pip install -r requirements.txt
 python demo_vqa.py --image-path <path_to_image> --question <question_for_image> --method-name <interpretability_method>
 ```
 
-### Visualisation of explanations provided by DSM and its variants on LXMERT
-```bash
-python demo_vqa.py --image-path <path_to_image> --question <question_for_image> --method-name "dsm_grad"
-```
-
 ![Alt text](test_images/lxmert_dsms.png "a title")
 
 

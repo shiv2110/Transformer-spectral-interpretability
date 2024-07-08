@@ -14,7 +14,7 @@ from scipy.stats import skew
 # from sentence_transformers import SentenceTransformer
 # from torch.nn import CosineSimilarity as CosSim
 
-from spectral.get_fev import get_eigs, get_grad_eigs, avg_heads
+from spectral.get_fev import get_eigs, get_grad_eigs, avg_heads, get_grad_cam_eigs
 
 
 class GeneratorOurs:
@@ -124,38 +124,20 @@ class GeneratorOurs:
         text_flen1 = len(model.lxmert.encoder.lang_feats_list_x)
 
         def get_layer_wise_fevs1 (feats_list, flen, modality, how_many):
-            # blk_count = 0
             layer_wise_fevs = []
             blk = model.lxmert.encoder.x_layers
-            # lang_blk = model.lxmert.encoder.layer
 
             for i in range(flen):
-                # feats = F.normalize(feats_list[i].detach().clone().squeeze().cpu(), p = 2, dim = -1)
-                # print(f"Features' shape: {feats.shape}")
-                fev = get_eigs(feats_list[i], modality, how_many)
-                if modality == "text":
-                    fev = fev[1:-1]
-                    # fev = torch.cat( ( torch.zeros(1), fev ) )
-
-                # layer_wise_fevs.append( eigenvalues[fev_idx].real * fev )
                 if modality == "image":
                     grad = blk[i].visn_self_att.self.get_attn_gradients().detach()
                     cam = blk[i].visn_self_att.self.get_attn().detach()
-                    cam = avg_heads(cam, grad)
-
-                    fev = fev.to(model.device)
-                    fev = cam @ fev.unsqueeze(1)
-                    fev = fev[:, 0]
+                    fev = get_grad_cam_eigs(feats_list[i], "text", grad, cam, model.device, how_many)
 
                 else:
-                    grad = blk[i].lang_self_att.self.get_attn_gradients().detach()[:, :, 1:-1, 1:-1]
-                    cam = blk[i].lang_self_att.self.get_attn().detach()[:, :, 1:-1, 1:-1]
-                    cam = avg_heads(cam, grad)
+                    grad = blk[i].lang_self_att.self.get_attn_gradients().detach()
+                    cam = blk[i].lang_self_att.self.get_attn().detach()
+                    fev = get_grad_cam_eigs(feats_list[i], "text", grad, cam, model.device, how_many)
 
-                    fev = fev.to(model.device)
-                    fev = cam @ fev.unsqueeze(1)
-                    fev = fev[:, 0]
-                    fev = torch.cat( ( torch.zeros(1).to(model.device), fev, torch.zeros(1).to(model.device)  ) )
 
 
                 layer_wise_fevs.append( torch.abs(fev) )
@@ -170,11 +152,8 @@ class GeneratorOurs:
                                                text_flen1, "text", how_many)
 
 
-        # return lang_fevs[-2], image_fevs[-2], eigenvalues_image, eigenvalues_text
         new_fev_image = torch.stack(image_fevs, dim=0).sum(dim=0)
         new_fev_lang = torch.stack(lang_fevs, dim=0).sum(dim=0)
-        # new_fev1 = (new_fev1 - torch.min(new_fev1))/(torch.max(new_fev1) - torch.min(new_fev1))
-        # new_fev = (new_fev - torch.min(new_fev))/(torch.max(new_fev) - torch.min(new_fev))
 
         return [new_fev_lang], [new_fev_image]
 
