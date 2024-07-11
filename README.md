@@ -11,8 +11,8 @@ The job of our interpretability module is to highlight the regions of image and 
 
 ## Demo
 ```bash
-git clone https://github.com/shiv2110/Transformer-MM-Explainability.git
-cd Transformer-MM-Explainability
+git clone https://github.com/shiv2110/Transformer-spectral-interpretability.git
+cd Transformer-spectral-interpretability
 pip install -r requirements.txt
 ```
 
