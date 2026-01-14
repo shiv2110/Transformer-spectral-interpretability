@@ -89,3 +89,28 @@ AUC scores for perturbations tests on LXMERT: Lower AUC for positive tests and h
 - Core DSMI implementation is based on [Deep Spectral Methods for unsupervised localisation and segmentation](https://github.com/lukemelas/deep-spectral-segmentation)
 - LXMERT implementation is based on the [offical LXMERT](https://github.com/airsplay/lxmertimplementation) and on [Hugging Face Transformers](https://github.com/huggingface/transformers)
 - CLIP implementation is based on the [official CLIP](https://github.com/openai/CLIP) implementation.
+
+## Cite Us
+
+```bibtex
+@InProceedings{10.1007/978-3-031-78395-1_9,
+author="Ambati, Shivanvitha
+and Padmanabhan, Vineet
+and Bhukya, Wilson Naik
+and Prasad Lal, Rajendra",
+editor="Antonacopoulos, Apostolos
+and Chaudhuri, Subhasis
+and Chellappa, Rama
+and Liu, Cheng-Lin
+and Bhattacharya, Saumik
+and Pal, Umapada",
+title="Interpretable Visual Semantic Alignment via Spectral Attribution",
+booktitle="Pattern Recognition",
+year="2025",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="129--143",
+abstract="The initial Transformer architecture which was introduced for text, has been extended to image, speech and other domains. Multimodal models which combine more than one kind of data, and vision-language models in particular, have also seen increasing adoption. The interpretability of these models is crucial due to their potential for subtle errors and their diverse applications. Existing interpretability methods for Transformers primarily employ attention maps to explain vision-language alignment. This overlooks the contribution from other parts of the transformer block like Layer Normalization and Feed-Forward Network (FFN) and can lead to incorrect image and text segment attribution to the model's decision. We propose an approach that mitigates this issue by using the output of the transformer modules instead of attention maps as the basis for deriving the interpretability vectors. We use Spectral Graph Theory and propose three variants of our method, namely: DSMI (Deep Spectral Method for Interpretability), DSMI + Grad (DSMI with gradients) and DSMI + Grad + Attn (DSMI with gradients {\&} attention maps). Each version has its own advantages with varying performance based on the class of models which are being analyzed. We show with detailed experiments that our methods are superior to some of the existing interpretability techniques such as GradCAM and have comparable interpretability to methods like LRP and other state-of-the-art methods while being simpler to implement.",
+isbn="978-3-031-78395-1"
+}
+```
